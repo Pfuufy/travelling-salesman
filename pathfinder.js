@@ -146,64 +146,31 @@ class Node {
 }
 
 // 2. calculate distance between two nodes
-
 const ecstatic_mccarthy = new Node('ecstatic_mccarthy', -980, 970, 2885);
 const angry_visvesvaraya = new Node('angry_visvesvaraya', -291, -4816, 1300);
 const admiring_heisenberg = new Node('admiring_heisenberg', -2020, -3532, -1330);
+const sharp_goldberg = new Node('sharp_goldberg', 1811, -2028, -4328);
+const fervent_snyder = new Node('fervent_snyder', -1656, 4396, 4160);
 
 const startNode = new Node('start', 0, 0, 0);
 const node1 = new Node('node1', 2, 2, 2);
-const node2 = new Node('node3', 5, 5, 5);
+const node2 = new Node('node2', 5, 5, 5);
 const node3 = new Node('node3', 9, 9, 9);
+const node4 = new Node('node4', 1, 1, 1);
 
-const nodes = [ecstatic_mccarthy, angry_visvesvaraya, admiring_heisenberg];
-// const nodes = [node1, node2, node3];
+const nodes = [node4, node3, node1, node2];
+const realNodes = [ecstatic_mccarthy, angry_visvesvaraya, admiring_heisenberg, sharp_goldberg, fervent_snyder];
 
 // 3. travel between nodes and calculate distance between them
 
-function genNodeOrderArrs(arrSize) {
-    let orderArr = [];
-
-    for (let i = 0; i < arrSize; i++) {
-        let subArr = [];
-        subArr.push(i);
-
-        for (let j = 0; j < arrSize; j++) {
-
-            if (i !== j) {
-                subArr.push(j);
-            }
-        }
-        orderArr.push(subArr);
+function getSizeArr(size) {
+    let sizeArr = [];
+    
+    for (let i = 0; i < size; i++) {
+        sizeArr.push(i);
     }
 
-    return orderArr;
-}
-
-function traverseNodes(nodeArr, orderArr) {
-    let traveledDistance = 0;
-    let mostRecentNode = startNode;
-
-    for (let i = 0, len = nodeArr.length; i < len; i++) {
-        const node = nodeArr[orderArr[i]];
-        const distance = Node.calcDistance(node, mostRecentNode);
-        
-        mostRecentNode = node;
-
-        traveledDistance += distance;
-    }
-
-    return traveledDistance;
-}
-
-function getNodeNames(nodeArr, orderArr) {
-    let nodeNamesArr = [];
-
-    orderArr.forEach((index) => {
-        nodeNamesArr.push(nodeArr[index].name);
-    });
-
-    return nodeNamesArr;
+    return sizeArr;
 }
 
 function getAllPermutations(array) {
@@ -231,14 +198,39 @@ function getAllPermutations(array) {
     return results;
 }
 
-console.log(getAllPermutations([1,2,3,4]));
+function calcTotalTravelDistance(nodeArr, orderArr) {
+    let traveledDistance = 0;
+    let mostRecentNode = startNode;
+
+    for (let i = 0, len = nodeArr.length; i < len; i++) {
+        const node = nodeArr[orderArr[i]];
+        const distance = Node.calcDistance(node, mostRecentNode);
+        
+        mostRecentNode = node;
+
+        traveledDistance += distance;
+    }
+
+    return traveledDistance;
+}
+
+function getNodeNames(nodeArr, orderArr) {
+    let nodeNamesArr = [];
+
+    orderArr.forEach((index) => {
+        nodeNamesArr.push(nodeArr[index].name);
+    });
+
+    return nodeNamesArr;
+}
 
 function findShortestRoute(nodeArr) {
-    const routes = getAllPermutations();
+    const nodeSizeArr = getSizeArr(nodeArr.length);
+    const routes = getAllPermutations(nodeSizeArr);
     let shortestRoute;
 
-    arrayOfOrderArrays.forEach((orderArr) => {
-        const distance = traverseNodes(nodeArr, orderArr);
+    routes.forEach((orderArr) => {
+        const distance = calcTotalTravelDistance(nodeArr, orderArr);
 
         if (!shortestRoute) {
             shortestRoute = {
@@ -256,51 +248,4 @@ function findShortestRoute(nodeArr) {
     return shortestRoute;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-// function getAllPermutations(array) {
-//     let results = [];
-  
-//     if (array.length === 1) {
-//         results.push(array[0]);
-//         return results;
-//     }
-  
-//     for (let i = 0; i < array.length; i++) {
-//         let firstChar = array[i];
-//         let charsLeft1 = array.slice(0, i);
-//         let charsLeft2 = array.slice(i + 1);
-//         // console.log('one', charsLeft1);
-//         // console.log('two', charsLeft2);
-//         let charsLeft = charsLeft1.concat(charsLeft2);
-//         let innerPermutations = getAllPermutations(charsLeft);
-//         for (let j = 0; j < innerPermutations.length; j++) {
-//             results.push(firstChar.toArray().concat((innerPermutations[j])));
-//         }
-//     }
-//     return results;
-// }
-
-
-
-const delivery1 = {"qPd3fSjj8hUigJBMtdno":{"deliveries":[
-                {"y":4396,"name":"fervent_snyder","z":4160,"x":-1656},
-                {"y":970,"name":"ecstatic_mccarthy","z":2885,"x":-980},
-                {"y":-3532,"name":"admiring_heisenberg","z":-1330,"x":-2020},
-                {"z":1300,"x":-291,"y":-4816,"name":"angry_visvesvaraya"},
-                {"y":-2028,"name":"sharp_goldberg","z":-4328,"x":1811}
-            ],"wormholes":[
-                {"name":"suspicious_sinoussi","alphaX":3420,"alphaZ":3175,"alphaY":-3463,"omegaZ":4429,"omegaY":-2432,"omegaX":-1068}
-            ],"hazards":[
-                {"radius":43,"y":2498,"name":"hungry_allen","z":3421,"x":3228}
-            ]}}
+console.log(findShortestRoute(realNodes));
