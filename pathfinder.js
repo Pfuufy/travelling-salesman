@@ -16,7 +16,7 @@ class Node {
         const deltaYSqrd = this.calcDeltaSqrd(node1.yCoord, node2.yCoord);
         const deltaZSqrd = this.calcDeltaSqrd(node1.zCoord, node2.zCoord);
 
-        return Math.sqrt(deltaXSqrd + deltaYSqrd + deltaZSqrd);
+        return Math.round(Math.sqrt(deltaXSqrd + deltaYSqrd + deltaZSqrd));
     }
 }
 
@@ -26,14 +26,28 @@ const admiring_heisenberg = new Node('admiring_heisenberg', -2020, -3532, -1330)
 const sharp_goldberg = new Node('sharp_goldberg', 1811, -2028, -4328);
 const fervent_snyder = new Node('fervent_snyder', -1656, 4396, 4160);
 
-const startNode = new Node('start', 0, 0, 0);
-const node1 = new Node('node1', 2, 2, 2);
-const node2 = new Node('node2', 5, 5, 5);
-const node3 = new Node('node3', 9, 9, 9);
-const node4 = new Node('node4', 1, 1, 1);
-
-const nodes = [node4, node3, node1, node2];
 const realNodes = [ecstatic_mccarthy, angry_visvesvaraya, admiring_heisenberg, sharp_goldberg, fervent_snyder];
+
+function getRandomNodeCoord() {
+    return Math.round(Math.random() * 100);
+}
+
+function generateNodes(amount) {
+    let nodeArr = [];
+
+    for (let i = 0; i < amount; i++) {
+        let node = new Node(
+            `node${i + 1}`,
+            getRandomNodeCoord(),
+            getRandomNodeCoord(),
+            getRandomNodeCoord()
+        );
+
+        nodeArr.push(node);
+    }
+
+    return nodeArr;
+}
 
 function getSizeArr(size) {
     let sizeArr = [];
@@ -72,7 +86,7 @@ function getAllPermutations(array) {
 
 function calcTotalTravelDistance(nodeArr, orderArr) {
     let traveledDistance = 0;
-    let mostRecentNode = startNode;
+    let mostRecentNode = new Node('start', 0, 0, 0);
 
     for (let i = 0, len = nodeArr.length; i < len; i++) {
         const node = nodeArr[orderArr[i]];
@@ -120,4 +134,7 @@ function findShortestRoute(nodeArr) {
     return shortestRoute;
 }
 
-console.log(findShortestRoute(realNodes));
+let randomNodeArr = generateNodes(3);
+console.log(randomNodeArr);
+
+console.log(findShortestRoute(randomNodeArr));
