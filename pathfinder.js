@@ -134,7 +134,8 @@ function findShortestRoute(nodeArr) {
     return shortestRoute;
 }
 
-let randomNodeArr = generateNodes(3);
-console.log(randomNodeArr);
+// MAX NODE SIZE: 10
+
+let randomNodeArr = generateNodes(10);
 
 console.log(findShortestRoute(randomNodeArr));
