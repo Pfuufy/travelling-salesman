@@ -206,26 +206,32 @@ function getNodeNames(nodeArr, orderArr) {
     return nodeNamesArr;
 }
 
-function getAllPermutations(string) {
+function getAllPermutations(array) {
     let results = [];
-  
-    if (string.length === 1) {
-        results.push(string[0]);
+
+    if (array.length === 1) {
+        results.push(array[0]);
         return results;
     }
-  
-    for (let i = 0; i < string.length; i++) {
-        let firstChar = string[i];
-        let charsLeft = string.substring(0, i) + string.substring(i + 1);
-        let innerPermutations = getAllPermutations(charsLeft);
-        for (let j = 0; j < innerPermutations.length; j++) {
-            results.push([firstChar + innerPermutations[j]]);
-        }
-    }
+    
+    array.forEach((el, i, arr) => {
+        let innerArr = [];
+        let firstEl = el;
+        let restEls = arr.slice(0, i).concat(arr.slice(i + 1, arr.length));
+
+        innerArr.push(firstEl);
+
+        let innerPermutations = getAllPermutations(restEls);
+
+        innerPermutations.forEach((el) => {
+            results.push(innerArr.concat(el));
+        });
+    });
+
     return results;
 }
 
-console.log(getAllPermutations([1,2,3]))
+console.log(getAllPermutations([1,2,3,4]));
 
 function findShortestRoute(nodeArr) {
     const routes = getAllPermutations();
@@ -262,7 +268,28 @@ function findShortestRoute(nodeArr) {
 
 
 
-
+// function getAllPermutations(array) {
+//     let results = [];
+  
+//     if (array.length === 1) {
+//         results.push(array[0]);
+//         return results;
+//     }
+  
+//     for (let i = 0; i < array.length; i++) {
+//         let firstChar = array[i];
+//         let charsLeft1 = array.slice(0, i);
+//         let charsLeft2 = array.slice(i + 1);
+//         // console.log('one', charsLeft1);
+//         // console.log('two', charsLeft2);
+//         let charsLeft = charsLeft1.concat(charsLeft2);
+//         let innerPermutations = getAllPermutations(charsLeft);
+//         for (let j = 0; j < innerPermutations.length; j++) {
+//             results.push(firstChar.toArray().concat((innerPermutations[j])));
+//         }
+//     }
+//     return results;
+// }
 
 
 
